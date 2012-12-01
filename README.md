@@ -4,7 +4,7 @@
 This project is a basic but complete virtual CPU engine.
 It is inspired by 8051 architecture and AVR-8 instructions.
 
-Warning: the core is not fully debugged / functionnal as now.
+**Warning: the core is not fully debugged / functionnal as now.**
 
 ---
 
@@ -16,13 +16,12 @@ The SkyCPU has :
 * one 16-bits stack pointer register
 
 For a better emulation efficiency there no status register !
-So to avoid coding problem the instruction set is pretty big.
+So, to avoid coding problems the instructions set is pretty big.
 
 By default the SkyCPU core use 65536 bytes (16 bits address bus) of RAM for the virtual cpu memory.
-This memory contain both CODE AND DATA binaries of the executed program (von neumann typed architecture).
-Allowing self-modifying programs to be created.
+This memory contain both CODE AND DATA binaries of the executed program (von neumann typed architecture) allowing self-modifying programs to be created.
 
-Remark: the last general purpose register (r31) is protected against access as >8bits value.
+Remark: the last general purpose register (r31) is protected against access as >8-bits value.
 In fact you have three extra bytes of general purpose register indirectly accessible using r31 value overflow.
 
 ---
@@ -31,7 +30,7 @@ In fact you have three extra bytes of general purpose register indirectly access
 
 #### Instructions opcode
 
-Format: [ o o o o o o b b ] (8 bits)
+Format: ( o o o o o o b b ) (8 bits)
 Bits fields :
 * o = instruction code (6 bits)
 * b = bits mode (2 bits)
@@ -62,35 +61,35 @@ Code	Instruction 	Description
 20	SUB		A = A - B
 21	MUL		A = A * B
 22	DIV		A = A / B
-23	AND		A = A & B
-24	NAND	A = ~(A & B)
+23	AND		A = A &amp; B
+24	NAND	A = ~(A &amp; B)
 25	OR		A = A | B
 26	NOR		A = ~(A | B)
 27	XOR		A = A ^ B
-28	SBI		A |= 1 << B
-29	CLI		A &=  ~(1 << B)
-30	LSL		A = A << B
-31	LSR		A = A >> B
-32	ROL		A = ((A & MSB_MASK) ? LSB_MASK : 0) | (A << B)
-33	ROR		A = ((A & LSB_MASK) ? MSB_MASK : 0) | (A >> B)
+28	SBI		A |= 1 &lt;&lt; B
+29	CLI		A &amp;=  ~(1 &lt;&lt; B)
+30	LSL		A = A &lt;&lt; B
+31	LSR		A = A &gt;&gt; B
+32	ROL		A = ((A &amp; MSB_MASK) ? LSB_MASK : 0) | (A &lt;&lt; B)
+33	ROR		A = ((A &amp; LSB_MASK) ? MSB_MASK : 0) | (A &gt;&gt; B)
 34	MOV		A = B
 35	CXH		tmp = A, A = B, B = tmp
 36	JE		JMP if A == B
 37	JNE		JMP if A != B
-38	JG		JMP if A > B
-39	JGE		JMP if A >= B
-40	JL		JMP if A < B
-41	JLE		JMP if A <= B
-42	JBC		JMP if !(A & (1 << B))
-43	JBS		JMP if A & (1 << B)
+38	JG		JMP if A &gt; B
+39	JGE		JMP if A &gt;= B
+40	JL		JMP if A &lt; B
+41	JLE		JMP if A &lt;= B
+42	JBC		JMP if !(A &amp; (1 &lt;&lt; B))
+43	JBS		JMP if A &amp; (1 &lt;&lt; B)
 44	SE		SKIP if A == B
 45	SNE		SKIP if A != B
-46	SG		SKIP if A > B
-47	SGE		SKIP if A >= B
-48	SL		SKIP if A < B
-49	SLE		SKIP if A <= B
-50	SBC		SKIP if !(A & (1 << B))
-51	SBS 	SKIP if A & (1 << B)
+46	SG		SKIP if A &gt; B
+47	SGE		SKIP if A &gt;= B
+48	SL		SKIP if A &lt; B
+49	SLE		SKIP if A &lt;= B
+50	SBC		SKIP if !(A &amp; (1 &lt;&lt; B))
+51	SBS 	SKIP if A &amp; (1 &lt;&lt; B)
 </pre>
 
 ##### Bits modes
@@ -104,7 +103,7 @@ Code	Mode
 
 #### Arguments opcode
 
-Format: [ c p s r r r r r ] (8 bits)
+Format: ( c p s r r r r r ) (8 bits)
 Bits fields :
 * c = constant value if set, regular register if clear
 * p = pointer if set, raw value if clear
@@ -165,7 +164,7 @@ Is equal to :
 
 Let make some decoding :
 <pre>[ 0 0 0 1 0 1 0 1 ] -> instruction byte = BRK in 8 bits mode
-[ 1 0 0 0 0 0 0  0 ] -> argument A byte = constant value, not a pointer, not inline
+[ 1 0 0 0 0 0 0 0 ] -> argument A byte = constant value, not a pointer, not inline
 [ 0 0 1 0 1 0 1 0 ] -> constant value (1 byte because we are working in 8 bits mode) = 42</pre>
 
 Or finaly in pure assembly code (using my own assembly notation) :
